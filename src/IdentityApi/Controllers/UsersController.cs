@@ -4,21 +4,31 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
+using IdentityApi.Services;
+using IdentityApi.Models;
+
 namespace IdentityApi.Controllers
 {
     /// <summary>
     /// Testing Web API controller
     /// </summary>
     [Route("api/v1/[controller]")]
-    public class ValuesController : Controller
+    public class UsersController : Controller
     {
+        private IUserService _userService;
+
+        public UsersController(IUserService userService) {
+            this._userService = userService;
+        }
+
+
         /// <summary>
         /// Returns list of all values
         /// </summary>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<User> Get()
         {
-            return new string[] { "value1", "value2" };
+            return _userService.GetAllUsersAsync().Result;
         }
 
         /// <summary>

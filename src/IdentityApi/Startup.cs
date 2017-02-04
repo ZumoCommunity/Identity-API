@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
+
+using IdentityApi.Models;
+using IdentityApi.Services;
 
 namespace IdentityApi
 {
@@ -27,6 +31,19 @@ namespace IdentityApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddIdentity<User, string>(opts => {
+                opts.Cookies.ApplicationCookie.LoginPath = new PathString("/Account/SignIn");
+                opts.Cookies.ApplicationCookie.LogoutPath = new PathString("/Account/SignOut");
+                opts.Cookies.ApplicationCookie.AccessDeniedPath = new PathString("/Account/AccessDenied");
+                opts.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromHours(2);
+                opts.Cookies.ApplicationCookie.SlidingExpiration = true;
+
+                opts.Password.RequireNonAlphanumeric = false;
+                opts.Password.RequireUppercase = false;
+                opts.Password.RequireDigit = false;
+            })
+            .AddIdentityUserServices();
+
             // Add framework services.
             services.AddMvc();
 
@@ -48,6 +65,9 @@ namespace IdentityApi
                 options.IncludeXmlComments(pathToDoc);
                 options.DescribeAllEnumsAsStrings();
             });
+
+            services.AddScoped<IUserService, UserService>();
+            services.AddTransient<ITestDataInitializer, TestDataInitializer>(); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,6 +80,9 @@ namespace IdentityApi
 
             app.UseSwagger();
             app.UseSwaggerUi();
+
+            var dataInitializer = app.ApplicationServices.GetRequiredService<ITestDataInitializer>();
+            dataInitializer.InitTestDataAsync().Wait();
         }
     }
 }
