@@ -18,8 +18,11 @@ namespace IdentityApi.Services
                 ClientId = "myClient",
                 ClientName = "My Custom Client",
                 AccessTokenLifetime = 60 * 60 * 24,
-                AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
-                RequireClientSecret = false,
+                //AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                //RequireClientSecret = false,
+                AllowedGrantTypes = GrantTypes.ClientCredentials,
+                ClientSecrets = new List<Secret> {
+                        new Secret("superSecretPassword".Sha256())},
                 AllowedScopes = {"myAPIs"}
             }
         };
@@ -58,7 +61,7 @@ namespace IdentityApi.Services
         }
 
         public static IEnumerable<ApiResource> GetApiResources() {
-            var apiSecret = "123456789"; //"scopeSecret".Sha256();
+            var apiSecret = "scopeSecret".Sha256();
 
             return new List<ApiResource> {
                 new ApiResource {
