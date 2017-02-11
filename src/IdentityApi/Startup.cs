@@ -11,11 +11,17 @@ using Microsoft.AspNetCore.Http;
 
 using IdentityApi.Models;
 using IdentityApi.Services;
+using IdentityServer4.Models;
+using IdentityServer4.Stores;
+using System.Security.Cryptography.X509Certificates;
 
 namespace IdentityApi
 {
     public class Startup
     {
+
+        string _homeFolder;
+
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -24,6 +30,8 @@ namespace IdentityApi
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+
+            _homeFolder = env.ContentRootPath;
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -44,8 +52,20 @@ namespace IdentityApi
             })
             .AddIdentityUserServices();
 
-            // Add framework services.
-            services.AddMvc();
+
+            services.AddSingleton<IClientStore, CustomClientStore>();
+
+
+            string certFilePath = System.IO.Path.Combine(_homeFolder, "IdentityApi.pfx");
+            string certPassword = Configuration.GetValue<string>("CERT_PWD");
+
+            services.AddIdentityServer()
+                //.AddTemporarySigningCredential()
+                .AddDefaultEndpoints()
+                .AddSigningCredential(new X509Certificate2(certFilePath, certPassword))
+                .AddInMemoryIdentityResources(IdentityServerData.GetIdentityResources())
+                .AddInMemoryApiResources(IdentityServerData.GetApiResources())
+                .AddAspNetIdentity<User>();
 
 
             //var pathToDoc = Configuration["Swagger:Path"];
@@ -63,7 +83,6 @@ namespace IdentityApi
                     TermsOfService = "None"
                 });
                 options.IncludeXmlComments(pathToDoc);
-                options.DescribeAllEnumsAsStrings();
             });
 
             services.AddScoped<IUserService, UserService>();
@@ -76,10 +95,20 @@ namespace IdentityApi
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            app.UseMvc();
+            if (env.IsDevelopment()) {
+                app.UseDeveloperExceptionPage();
+                app.UseBrowserLink();
+            }
+
 
             app.UseSwagger();
             app.UseSwaggerUi();
+
+            app.UseIdentity();
+            app.UseIdentityServer();
+
+            //app.UseMvc();
+
 
             var dataInitializer = app.ApplicationServices.GetRequiredService<ITestDataInitializer>();
             dataInitializer.InitTestDataAsync().Wait();

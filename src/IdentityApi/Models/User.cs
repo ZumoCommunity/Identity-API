@@ -9,7 +9,7 @@ namespace IdentityApi.Models {
             PartitionKey = DefaultPartitionKey;
             RowKey = Guid.NewGuid().ToString("N");
             FullName = "New User";
-            UserRoles = "";
+            Roles = "";
         }
 
         public string PasswordHash { get; set; }
@@ -18,7 +18,7 @@ namespace IdentityApi.Models {
 
         public string Email { get; set; }
 
-        public string UserRoles { get; set; }
+        public string Roles { get; set; }
 
         [IgnoreProperty]
         public string Id {

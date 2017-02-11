@@ -23,7 +23,7 @@ namespace IdentityApi.Controllers
 
 
         /// <summary>
-        /// Returns list of all values
+        /// Returns list of all users
         /// </summary>
         [HttpGet]
         public IEnumerable<User> Get()
@@ -31,35 +31,44 @@ namespace IdentityApi.Controllers
             return _userService.GetAllUsersAsync().Result;
         }
 
-        /// <summary>
-        /// Returns one value by its ID
-        /// </summary>
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
 
-        /// <summary>
-        /// Adds new value
-        /// </summary>
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
 
-        /// <summary>
-        /// Updates some value by its ID
-        /// </summary>
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
+        //[HttpPost("login")]
+        //public IToken Login() {
+        //    return _userService.GetAllUsersAsync().Result;
+        //}
 
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+
+
+        ///// <summary>
+        ///// Returns one value by its ID
+        ///// </summary>
+        //[HttpGet("{id}")]
+        //public string Get(int id)
+        //{
+        //    return "value";
+        //}
+
+        ///// <summary>
+        ///// Adds new value
+        ///// </summary>
+        //[HttpPost]
+        //public void Post([FromBody]string value)
+        //{
+        //}
+
+        ///// <summary>
+        ///// Updates some value by its ID
+        ///// </summary>
+        //[HttpPut("{id}")]
+        //public void Put(int id, [FromBody]string value)
+        //{
+        //}
+
+        //// DELETE api/values/5
+        //[HttpDelete("{id}")]
+        //public void Delete(int id)
+        //{
+        //}
     }
 }

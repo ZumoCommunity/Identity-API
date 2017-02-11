@@ -25,18 +25,26 @@ namespace IdentityApi
         public async Task InitTestDataAsync() {
             var user = await _userManager.FindByNameAsync("test01@zumo.org");
             if (user == null) {
-                await _userManager.CreateAsync(new User {
+                user = new User {
                     Email = "test01@zumo.org",
-                    FullName = "Test User 01"
-                });
+                    FullName = "Test User 01",
+                    Roles = "admin,user"
+                };
+
+                await _userManager.CreateAsync(user);
+
+                await _userManager.AddPasswordAsync(user, "test01");
             }
 
             user = await _userManager.FindByNameAsync("test02@zumo.org");
             if (user == null) {
-                await _userManager.CreateAsync(new User {
+                user = new User {
                     Email = "test02@zumo.org",
-                    FullName = "Test User 02"
-                });
+                    FullName = "Test User 02",
+                    Roles = "user"
+                };
+
+                await _userManager.CreateAsync(user, "test02");
             }
         }
     }

@@ -106,34 +106,34 @@ namespace IdentityApi.Services
         public async Task AddToRoleAsync(User user, string roleName, CancellationToken cancellationToken) {
             if (string.IsNullOrEmpty(roleName))
                 return ;
-            if (string.IsNullOrEmpty(user.UserRoles))
-                user.UserRoles = roleName;
-            else if (!user.UserRoles.Contains(roleName))
-                user.UserRoles += "," + roleName;
+            if (string.IsNullOrEmpty(user.Roles))
+                user.Roles = roleName;
+            else if (!user.Roles.Contains(roleName))
+                user.Roles += "," + roleName;
 
             await userTable.InsertOrMergeEntityAsync(user);
         }
 
         public Task<IList<string>> GetRolesAsync(User user, CancellationToken cancellationToken) {
-            return Task.FromResult<IList<string>>(user.UserRoles?.Split(',').ToList());
+            return Task.FromResult<IList<string>>(user.Roles?.Split(',').ToList());
         }
 
 
         public async Task<IList<User>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken) {
             return (await userTable.GetEntitiesByFilterAsync(""))
-                .Where(u => u.UserRoles.IndexOf(roleName) >= 0)
+                .Where(u => u.Roles.IndexOf(roleName) >= 0)
                 .ToList();
         }
 
         public Task<bool> IsInRoleAsync(User user, string roleName, CancellationToken cancellationToken) {
-            return Task.FromResult(!string.IsNullOrEmpty(user.UserRoles) && user.UserRoles.Contains(roleName));
+            return Task.FromResult(!string.IsNullOrEmpty(user.Roles) && user.Roles.Contains(roleName));
         }
 
         public async Task RemoveFromRoleAsync(User user, string roleName, CancellationToken cancellationToken) {
-            if (!string.IsNullOrEmpty(roleName) && user.UserRoles.Contains(roleName)) {
-                var roles = user.UserRoles.Split(',').ToList();
+            if (!string.IsNullOrEmpty(roleName) && user.Roles.Contains(roleName)) {
+                var roles = user.Roles.Split(',').ToList();
                 roles.Remove(roleName);
-                user.UserRoles = string.Join(",", roles);
+                user.Roles = string.Join(",", roles);
                 await userTable.InsertOrMergeEntityAsync(user);
             }
         }

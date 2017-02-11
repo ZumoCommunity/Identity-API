@@ -13,6 +13,7 @@
       "launchBrowser": true,
       "launchUrl": "swagger/ui",
       "environmentVariables": {
+        "CERT_PWD": "1d3nt1tyAp1",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
