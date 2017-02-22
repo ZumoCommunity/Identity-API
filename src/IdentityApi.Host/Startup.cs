@@ -10,6 +10,8 @@ using IdentityApi.Services;
 using IdentityServer4.Stores;
 using System.Security.Cryptography.X509Certificates;
 
+using Korzh.WindowsAzure.Storage;
+
 namespace IdentityApi
 {
     public class Startup
@@ -24,8 +26,7 @@ namespace IdentityApi
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
-            if (env.IsDevelopment())
-            {
+            if (env.IsDevelopment()) {
                 // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
                 builder.AddUserSecrets();
             }
@@ -33,6 +34,7 @@ namespace IdentityApi
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
 
+            AzureStorageConfig.ConnectionString = Configuration.GetConnectionString("AzureStorage");
             _homeFolder = env.ContentRootPath;
         }
 
@@ -41,14 +43,17 @@ namespace IdentityApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
+            //Add configuration service
+            services.AddSingleton<IConfiguration>(Configuration);       
+
+
+            // Add ASP.NET Identity services.
             services.AddIdentity<User, string>(opts => {
                 //opts.Cookies.ApplicationCookie.LoginPath = new PathString("/Account/SignIn");
                 //opts.Cookies.ApplicationCookie.LogoutPath = new PathString("/Account/SignOut");
                 //opts.Cookies.ApplicationCookie.AccessDeniedPath = new PathString("/Account/AccessDenied");
                 //opts.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromHours(2);
                 //opts.Cookies.ApplicationCookie.SlidingExpiration = true;
-
 
                 opts.Password.RequireNonAlphanumeric = false;
                 opts.Password.RequireUppercase = false;
@@ -88,7 +93,8 @@ namespace IdentityApi
 
             services.AddMvc();
 
-            var pathToDoc = @"bin\Debug\netcoreapp1.0\IdentityApi.xml";
+            //Add swagger services
+            var pathToDoc = Configuration["SwaggerPath"];
 
             services.AddSwaggerGen();
             services.ConfigureSwaggerGen(options => {
@@ -109,10 +115,6 @@ namespace IdentityApi
 
             services.AddTransient<ITestDataInitializer, TestDataInitializer>();
 
-
-            // Add application services.
-            services.AddTransient<IEmailSender, AuthMessageSender>();
-            services.AddTransient<ISmsSender, AuthMessageSender>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -132,6 +134,9 @@ namespace IdentityApi
             }
 
             app.UseStaticFiles();
+
+            app.UseSwagger();
+            app.UseSwaggerUi();
 
             app.UseIdentity();
             app.UseIdentityServer();

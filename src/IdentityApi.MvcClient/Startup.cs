@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.IdentityModel.Tokens.Jwt;
 
+
+
 namespace MvcClient
 {
     public class Startup
@@ -18,17 +20,16 @@ namespace MvcClient
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
+
         }
 
         public IConfigurationRoot Configuration { get; }
 
-        public void ConfigureServices(IServiceCollection services)
-        {
+        public void ConfigureServices(IServiceCollection services) {
             services.AddMvc();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
-        {
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory) {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));

@@ -13,7 +13,8 @@
       "launchBrowser": true,
       "environmentVariables": {
         "CERT_PWD": "1d3nt1tyAp1",
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "SwaggerPath": "bin\\Debug\\netcoreapp1.1\\IdentityApi.Host.xml"
       }
     }
   }

@@ -1,11 +1,12 @@
 ﻿using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
+using Korzh.WindowsAzure.Storage;
 
 namespace Korzh.WindowsAzure.Storage
 {
 
     public static class AzureStorageConfig {
-        public static string ConnectionString = "UseDevelopmentStorage=true";
+        public static string ConnectionString = ""; //"UseDevelopmentStorage=true";
     }
 
 	public abstract class StorageServiceBase
