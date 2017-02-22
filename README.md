@@ -47,15 +47,17 @@ So, we guess all steps listed in Prerequisites are performed and all projects in
  4. After login you will be redirected back to "User Profile" page of client's application. 
  Check all claims associated with current user. You can also check the content of issued access token via [JWT.io](https://jwt.io) web-service.
  
- ## Deployment
- On deployment you need to set the following environment variables:
+
  
-  * SwaggerPath = {path to XMLDoc file}. By default it's `bin\Release\netcoreapp1.1\IdentityApi.Host.xml`
-  * CERT_PWD = {password for signing certificate}
-  * ConnectionStrings : AzureStorage = {connection string to Azure storage account}
+## Deployment
+ n deployment you need to set the following environment variables:
+ 
+ * SwaggerPath = {path to XMLDoc file}. By default it's `bin\Release\netcoreapp1.1\IdentityApi.Host.xml`
+ * CERT_PWD = {password for signing certificate}
+ * ConnectionStrings : AzureStorage = {connection string to Azure storage account}
   
  
  
  
- **Enjoy!**
+**Enjoy!**
  
