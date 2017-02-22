@@ -10,32 +10,26 @@ namespace MvcClient.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
-        {
+        public IActionResult Index() {
             return View();
         }
 
         [Authorize]
-        public IActionResult Secure()
-        {
-            ViewData["Message"] = "Secure page.";
+        public IActionResult UserProfile() {
 
             return View();
         }
 
-        public async Task Logout()
-        {
+        public async Task Logout() {
             await HttpContext.Authentication.SignOutAsync("Cookies");
             await HttpContext.Authentication.SignOutAsync("oidc");
         }
 
-        public IActionResult Error()
-        {
+        public IActionResult Error() {
             return View();
         }
 
-        public async Task<IActionResult> CallApiUsingClientCredentials()
-        {
+        public async Task<IActionResult> CallApiUsingClientCredentials() {
             var tokenClient = new TokenClient("http://localhost:5000/connect/token", "mvc", "secret");
             var tokenResponse = await tokenClient.RequestClientCredentialsAsync("api1");
 
@@ -47,8 +41,7 @@ namespace MvcClient.Controllers
             return View("json");
         }
 
-        public async Task<IActionResult> CallApiUsingUserAccessToken()
-        {
+        public async Task<IActionResult> CallApiUsingUserAccessToken() {
             var accessToken = await HttpContext.Authentication.GetTokenAsync("access_token");
 
             var client = new HttpClient();

@@ -1,1 +1,33 @@
 # Identity-API
+
+This repository contains basic implementation of IdentityApi service (IdentityApi.Host project) and and example of web client (IdentityApi.MvcClient) which corresponds with host service by OpenID Connect and Oauth 2.0 protocols.    
+NB: Both host and client project were built with ASP.NET Core MVC over .NET Core 1.1 and can be run using VS 2015 with the latest .NET Core Tools (Preview 2).
+
+
+## Prerequisites
+Here we will describe how to setup and run the examples
+
+
+### 1. .NET Core 1.1
+Download and run appropriate (for your system) installer from [.NET web-site](https://www.microsoft.com/net/download/core#/current) 
+
+
+### 2.  Azure SDK 
+IdentityApi.Host application uses Azure Table Storage to store information about user profiles, API resources, clients (other services), etc.
+So you need to install [Azure SDK](https://azure.microsoft.com/en-us/downloads/) for VS 2015 and launch  storage emulator before running the projects locally.   
+
+Here are the commands you need to start storage emulator:
+
+```
+cd "c:\Program Files (x86)\Microsoft SDKs\Azure\Storage Emulator" 
+AzureStorageEmulator.exe start
+```
+
+### 3.  Startup projects
+Both host and client projects should be run in necessary order to make it work properly. To setup that - right click on solution's node (IdentityApi) in Solution Explorer and select "Set StartUp projects..." item there. After that select "Multiple startup projects" option, set "Start" as "Action" for all projects and make "IdentityApi.Host" project to be first in list.
+ 
+NB1: We run IdentityApi.Host app on port `localhost:5000` and IdentityApi.MvcClient on `localhost:5002`. These addresses are hard-coded currently and should be moved to configuration for proper deploying.
+
+
+NB2: We also included into repository the signing certificate with private key (file IdentityApi.pfx) and the password for this certificate (CERT_PWD envritonment variable in Identity.Host launch settings).  Both these items should be removed from Git repository further by security reasons.
+

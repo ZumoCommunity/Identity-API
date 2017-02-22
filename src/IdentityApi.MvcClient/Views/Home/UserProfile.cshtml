@@ -1,0 +1,34 @@
+﻿@using Microsoft.AspNetCore.Authentication;
+@{
+    ViewData["Title"] = "User profile";
+}
+<h2>@ViewData["Title"]</h2>
+
+
+<h3>User claims</h3>
+<dl>
+    @foreach (var claim in User.Claims)
+    {
+        <dt>@claim.Type</dt>
+        <dd>@claim.Value</dd>
+
+    }
+
+</dl>
+
+<h3>Tokens</h3>
+<dl>
+    <dt>access token</dt>
+    <dd>@await ViewContext.HttpContext.Authentication.GetTokenAsync("access_token")</dd>
+
+    <dt>refresh token</dt>
+    <dd>@await ViewContext.HttpContext.Authentication.GetTokenAsync("refresh_token")</dd>
+</dl>
+
+<h3>Testing APIs</h3>
+<div>
+    <a asp-action="CallApiUsingUserAccessToken">Call API using user token</a>
+</div>
+<div>
+    <a asp-action="CallApiUsingClientCredentials">Call API using application identity</a>
+</div>
