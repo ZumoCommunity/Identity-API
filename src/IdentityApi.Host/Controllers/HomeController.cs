@@ -18,7 +18,7 @@ namespace IdentityApi.Controllers
             return View();
         }
 
-        public IActionResult Api() {
+        public IActionResult Docs() {
 
             return View();
         }

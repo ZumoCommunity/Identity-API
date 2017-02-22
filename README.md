@@ -31,3 +31,21 @@ NB1: We run IdentityApi.Host app on port `localhost:5000` and IdentityApi.MvcCli
 
 NB2: We also included into repository the signing certificate with private key (file IdentityApi.pfx) and the password for this certificate (CERT_PWD envritonment variable in Identity.Host launch settings).  Both these items should be removed from Git repository further by security reasons.
 
+
+## How to test samples
+So, we guess all steps listed in Prerequisites are performed and all projects in IdenityApi solution are build without errors. 
+
+ 1. Start the projects in debug mode (F5). Two web-pages should be opened in your default browser: http://localhost:5000 - for host application and http://localhost:5002 - for web client
+
+ 2. On web client's page (localhost:5002) click on "User Profile" link in page's header. You will be redirected to login page on host's application.
+ 
+ 3. Use the following credentials to sign in:
+ 
+  * email: admin@zumo.org
+  * password: admin01
+ 
+ 4. After login you will be redirected back to "User Profile" page of client's application. 
+ Check all claims associated with current user. You can also check the content of issued access token via [JWT.io](https://jwt.io) web-service.
+ 
+ ## Enjoy!
+ 

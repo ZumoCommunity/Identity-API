@@ -51,7 +51,7 @@ namespace IdentityApi.Services
             // OpenID Connect hybrid flow and client credentials client (MVC)
             new Client {
                 ClientId = "mvc",
-                ClientName = "MVC Client",
+                ClientName = "Web Client",
                 AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
 
                 RequireConsent = false,
