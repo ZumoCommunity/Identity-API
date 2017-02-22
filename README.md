@@ -50,7 +50,7 @@ So, we guess all steps listed in Prerequisites are performed and all projects in
 
  
 ## Deployment
- n deployment you need to set the following environment variables:
+On deployment you need to set the following environment variables:
  
  * SwaggerPath = {path to XMLDoc file}. By default it's `bin\Release\netcoreapp1.1\IdentityApi.Host.xml`
  * CERT_PWD = {password for signing certificate}
