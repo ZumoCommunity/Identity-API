@@ -54,12 +54,16 @@ On deployment you need to set the following environment variables:
  
 ### IdentityApi.Host
 
- * Swagger__XmlDocPath = {path to XMLDoc file}. By default it's `bin\Release\netcoreapp1.1\IdentityApi.Host.xml`
+ * Swagger__XmlDocPath = {path to XMLDoc file} //By default it's `bin\Release\netcoreapp1.1\IdentityApi.Host.xml`
  * CERT_PWD = {password for signing certificate}
  * ConnectionStrings__AzureStorage = {connection string to Azure storage account}
  
+### IdentityApi.MvcClient
 
-NB: When publishing to Azure you need can set connection strings separately from other environment variables. In this case you don't need  "ConnectionStrings__" prefix. Use the connection string name only (like "AzureStorage").
+ * Endpoints__IdentityApi = {path to IdentityApi host}   //it's "http://localhost:5000" by default 
+ 
+
+**NB**: When publishing to Azure you need can set connection strings separately from other environment variables. In this case you don't need  "ConnectionStrings__" prefix. Use the connection string name only (like "AzureStorage").
  
  
  

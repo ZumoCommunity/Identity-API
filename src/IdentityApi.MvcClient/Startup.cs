@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.IdentityModel.Tokens.Jwt;
 
-
+using MvcClient.Options;
 
 namespace MvcClient
 {
@@ -26,6 +26,8 @@ namespace MvcClient
         public IConfigurationRoot Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services) {
+            services.Configure<EndpointOptions>(Configuration.GetSection("Endpoints"));
+
             services.AddMvc();
         }
 
@@ -35,26 +37,22 @@ namespace MvcClient
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            if (env.IsDevelopment())
-            {
+            if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
+            else {
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
+            app.UseCookieAuthentication(new CookieAuthenticationOptions {
                 AuthenticationScheme = "Cookies"
             });
 
-            app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions
-            {
+            app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions {
                 AuthenticationScheme = "oidc",
                 SignInScheme = "Cookies",
 
-                Authority = "http://localhost:5000",
+                Authority = Configuration["Endpoints:IdentityApi"],
                 RequireHttpsMetadata = false,
 
                 ClientId = "mvc",

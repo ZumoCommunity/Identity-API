@@ -1,15 +1,28 @@
 ﻿using System.Threading.Tasks;
+using System.Net.Http;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
-using System.Net.Http;
+using Microsoft.Extensions.Options;
+
 using Newtonsoft.Json.Linq;
+
 using IdentityModel.Client;
+
+using MvcClient.Options;
 
 namespace MvcClient.Controllers
 {
     public class HomeController : Controller
     {
+        private EndpointOptions _endpointOptions;
+
+        public HomeController(IOptions<EndpointOptions> optionsAccessor) {
+            this._endpointOptions = optionsAccessor.Value;
+        }
+
+
         public IActionResult Index() {
             return View();
         }
@@ -30,7 +43,8 @@ namespace MvcClient.Controllers
         }
 
         public async Task<IActionResult> CallApiUsingClientCredentials() {
-            var tokenClient = new TokenClient("http://localhost:5000/connect/token", "mvc", "secret");
+            var authEndpoint = _endpointOptions.IdentityApi;
+            var tokenClient = new TokenClient(authEndpoint + "/connect/token", "mvc", "secret");
             var tokenResponse = await tokenClient.RequestClientCredentialsAsync("api1");
 
             var client = new HttpClient();
