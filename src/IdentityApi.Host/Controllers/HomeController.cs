@@ -15,6 +15,8 @@ namespace IdentityApi.Controllers
         }
 
         public IActionResult Index() {
+            ViewData["InitErrors"] = Startup.InitErrors;
+
             return View();
         }
 

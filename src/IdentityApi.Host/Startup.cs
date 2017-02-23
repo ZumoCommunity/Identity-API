@@ -11,13 +11,17 @@ using IdentityServer4.Stores;
 using System.Security.Cryptography.X509Certificates;
 
 using Korzh.WindowsAzure.Storage;
+using System;
 
 namespace IdentityApi
 {
     public class Startup
     {
 
-        string _homeFolder;
+        public static string InitErrors = "";
+
+        IHostingEnvironment CurrentEnvironment;
+
 
         public Startup(IHostingEnvironment env)
         {
@@ -34,8 +38,9 @@ namespace IdentityApi
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
 
+            CurrentEnvironment = env;
+
             AzureStorageConfig.ConnectionString = Configuration.GetConnectionString("AzureStorage");
-            _homeFolder = env.ContentRootPath;
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -68,18 +73,31 @@ namespace IdentityApi
             services.AddSingleton<IClientStore, ZumoClientStore>();
 
 
-            string certFilePath = System.IO.Path.Combine(_homeFolder, "IdentityApi.pfx");
+            string certFilePath = "IdentityApi.pfx";
             string certPassword = Configuration.GetValue<string>("CERT_PWD");
 
-            services.AddIdentityServer(opts => {
+            var identityServerBuilder = services.AddIdentityServer(opts => {
                 opts.UserInteraction.LoginUrl = "/Account/Login";
             })
-                .AddSigningCredential(new X509Certificate2(certFilePath, certPassword))
                 .AddDefaultEndpoints()
                 .AddInMemoryIdentityResources(IdentityServerData.GetIdentityResources())
                 .AddInMemoryApiResources(IdentityServerData.GetApiResources())
 
                 .AddAspNetIdentity<User>();
+
+            try {
+                //loading certificate as pfx file
+                var certificate = new X509Certificate2(certFilePath, certPassword, X509KeyStorageFlags.MachineKeySet);
+                identityServerBuilder.AddSigningCredential(certificate);
+
+                //loading certificate from machine storage (!!!!!!! doesn't work by some reason - need to figure out why)
+                //identityServerBuilder.AddSigningCredential("ZumoCommunity.IdentityApi");
+            }
+            catch (Exception ex) {
+                //If not available - generate temporary
+                identityServerBuilder.AddTemporarySigningCredential();
+                InitErrors += ex.Message + "\n" + ex.StackTrace;
+            }
 
 
             //services.AddIdentityServer()
@@ -94,7 +112,7 @@ namespace IdentityApi
             services.AddMvc();
 
             //Add swagger services
-            var pathToDoc = Configuration["Swagger:XmlDocPath"];
+            var pathToDoc = "IdentityApi.Host.xml";  //Configuration["Swagger:XmlDocPath"];
 
             services.AddSwaggerGen();
             services.ConfigureSwaggerGen(options => {
@@ -122,10 +140,11 @@ namespace IdentityApi
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+            loggerFactory.AddConsole();
 
+            app.UseDeveloperExceptionPage();
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
             }
             else
@@ -139,6 +158,7 @@ namespace IdentityApi
             app.UseSwaggerUi();
 
             app.UseIdentity();
+
             app.UseIdentityServer();
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715

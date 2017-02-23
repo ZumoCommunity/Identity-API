@@ -1,8 +1,18 @@
 ﻿@{
     ViewData["Title"] = "Home";
+    string initErrors = ViewData["InitErrors"] as string;
 }
 
 <h1>IdentityApi.Host</h1>
+
+@if (!string.IsNullOrEmpty(initErrors)) {
+<p>Init errors: </p>
+<pre>
+@initErrors
+</pre>
+}
+
+
 @if (User.Identity.IsAuthenticated)
 {
     <h1>Welcome back @User.Identity.Name</h1>
