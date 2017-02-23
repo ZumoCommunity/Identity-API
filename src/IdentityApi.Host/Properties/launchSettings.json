@@ -12,9 +12,9 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
+        "Swagger__XmlDocPath": "bin\\Debug\\netcoreapp1.1\\IdentityApi.Host.xml",
         "CERT_PWD": "1d3nt1tyAp1",
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "SwaggerPath": "bin\\Debug\\netcoreapp1.1\\IdentityApi.Host.xml"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
   }

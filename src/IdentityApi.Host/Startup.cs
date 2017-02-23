@@ -94,7 +94,7 @@ namespace IdentityApi
             services.AddMvc();
 
             //Add swagger services
-            var pathToDoc = Configuration["SwaggerPath"];
+            var pathToDoc = Configuration["Swagger:XmlDocPath"];
 
             services.AddSwaggerGen();
             services.ConfigureSwaggerGen(options => {

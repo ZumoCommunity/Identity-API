@@ -52,10 +52,14 @@ So, we guess all steps listed in Prerequisites are performed and all projects in
 ## Deployment
 On deployment you need to set the following environment variables:
  
- * SwaggerPath = {path to XMLDoc file}. By default it's `bin\Release\netcoreapp1.1\IdentityApi.Host.xml`
+### IdentityApi.Host
+
+ * Swagger__XmlDocPath = {path to XMLDoc file}. By default it's `bin\Release\netcoreapp1.1\IdentityApi.Host.xml`
  * CERT_PWD = {password for signing certificate}
- * ConnectionStrings : AzureStorage = {connection string to Azure storage account}
-  
+ * ConnectionStrings__AzureStorage = {connection string to Azure storage account}
+ 
+
+NB: When publishing to Azure you need can set connection strings separately from other environment variables. In this case you don't need  "ConnectionStrings__" prefix. Use the connection string name only (like "AzureStorage").
  
  
  
