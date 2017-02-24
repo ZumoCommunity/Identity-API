@@ -253,3 +253,4 @@ paket-files/
 /ConnectionStrings.txt
 /src/IdentityApi.Host/Properties/PublishProfiles/IdentityApiWebApp - Web Deploy-publish.ps1
 /src/IdentityApi.Host/Properties/PublishProfiles/publish-module.psm1
+.vscode
