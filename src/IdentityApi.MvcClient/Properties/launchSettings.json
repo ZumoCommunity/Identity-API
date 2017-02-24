@@ -12,7 +12,6 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "Endpoints__IdentityApi": "http://localhost:5000",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },

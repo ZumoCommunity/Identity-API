@@ -48,11 +48,12 @@ namespace MvcClient
                 AuthenticationScheme = "Cookies"
             });
 
+            var authorityEndpoint = Configuration["Endpoints:IdentityApi"];
             app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions {
                 AuthenticationScheme = "oidc",
                 SignInScheme = "Cookies",
 
-                Authority = Configuration["Endpoints:IdentityApi"],
+                Authority = authorityEndpoint,
                 RequireHttpsMetadata = false,
 
                 ClientId = "mvc",
