@@ -46,7 +46,7 @@ namespace IdentityApi.Services
 
         public async Task<User> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken) {
             var users = await userTable.ListEntitiesByFilterAsync(new Dictionary<string, object>() {
-                {nameof(User.Email), normalizedUserName}
+                {nameof(User.NormalizedEmail), normalizedUserName}
             });
 
             return users.FirstOrDefault();
@@ -82,14 +82,14 @@ namespace IdentityApi.Services
             }
         }
 
-        public Task SetNormalizedUserNameAsync(User user, string normalizedName, CancellationToken cancellationToken) {
-            //user.NormalizedUserName = normalizedName;
-            //await userService.SaveAsync(user);
-            return Task.FromResult(0);
+        public async Task SetNormalizedUserNameAsync(User user, string normalizedName, CancellationToken cancellationToken) {
+            user.NormalizedEmail = normalizedName;
+            await userTable.InsertOrMergeEntityAsync(user);
         }
 
-        public Task SetUserNameAsync(User user, string userName, CancellationToken cancellationToken) {
-            return Task.FromResult(0);
+        public async Task SetUserNameAsync(User user, string userName, CancellationToken cancellationToken) {
+            user.Email = userName;
+            await userTable.InsertOrMergeEntityAsync(user);
         }
 
         public async Task<IdentityResult> UpdateAsync(User user, CancellationToken cancellationToken) {

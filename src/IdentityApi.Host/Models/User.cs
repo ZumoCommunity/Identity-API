@@ -19,6 +19,8 @@ namespace IdentityApi.Models {
 
         public string Email { get; set; }
 
+        public string NormalizedEmail { get; set; }
+
         public UserGender Gender { get; set; } = UserGender.Undefined;
 
         public string Roles { get; set; }

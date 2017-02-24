@@ -12,6 +12,7 @@ using System.Security.Cryptography.X509Certificates;
 
 using Korzh.WindowsAzure.Storage;
 using System;
+using Microsoft.AspNetCore.Identity;
 
 namespace IdentityApi
 {
@@ -128,6 +129,8 @@ namespace IdentityApi
             services.AddScoped<IUserService, UserService>();
 
             // Add application services.
+            services.AddSingleton<ILookupNormalizer>(new LowerInvariantLookupNormalizer());
+
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
 
