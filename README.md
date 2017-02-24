@@ -54,7 +54,6 @@ On deployment you need to set the following environment variables:
  
 ### IdentityApi.Host
 
- * Swagger__XmlDocPath = {path to XMLDoc file} //By default it's `bin\Release\netcoreapp1.1\IdentityApi.Host.xml`
  * CERT_PWD = {password for signing certificate}
  * ConnectionStrings__AzureStorage = {connection string to Azure storage account}
  
