@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>IdentityApi.Host</name>
+    </assembly>
+    <members>
+        <member name="M:IdentityApi.Controllers.AccountController.Logout(System.String)">
+            <summary>
+            Show logout page
+            </summary>
+        </member>
+        <member name="M:IdentityApi.Controllers.AccountController.Logout(IdentityServer4.Quickstart.UI.LogoutViewModel)">
+            <summary>
+            Handle logout page postback
+            </summary>
+        </member>
+        <member name="T:IdentityServer4.Quickstart.UI.ConsentController">
+            <summary>
+            This controller processes the consent UI
+            </summary>
+        </member>
+        <member name="M:IdentityServer4.Quickstart.UI.ConsentController.Index(System.String)">
+            <summary>
+            Shows the consent screen
+            </summary>
+            <param name="returnUrl"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IdentityServer4.Quickstart.UI.ConsentController.Index(IdentityServer4.Quickstart.UI.ConsentInputModel)">
+            <summary>
+            Handles the consent screen postback
+            </summary>
+        </member>
+    </members>
+</doc>

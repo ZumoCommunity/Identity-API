@@ -1,0 +1,21 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:5000",
+      "sslPort": 0
+    }
+  },
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "Swagger__XmlDocPath": "bin\\Debug\\netcoreapp1.1\\IdentityApi.Host.xml",
+        "CERT_PWD": "1d3nt1tyAp1",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
