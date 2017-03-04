@@ -4,6 +4,11 @@ namespace IdentityApi.Models.AccountViewModels
 {
     public class RegisterViewModel
     {
+
+        [Display(Name = "Name")]
+        public string FullName { get; set; }
+
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]

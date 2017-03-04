@@ -62,8 +62,7 @@ namespace IdentityApi.Models {
             }
         }
 
-
-
+        
         [IgnoreProperty]
         public string Id {
             get { return this.RowKey; }
