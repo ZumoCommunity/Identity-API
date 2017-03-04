@@ -11,8 +11,12 @@ namespace MvcClient
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        ILoggerFactory _loggerFactory;
+
+        public Startup(IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            this._loggerFactory = loggerFactory;
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
