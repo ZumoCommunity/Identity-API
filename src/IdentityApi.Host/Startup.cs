@@ -23,9 +23,12 @@ namespace IdentityApi
 
         IHostingEnvironment CurrentEnvironment;
 
+        ILoggerFactory _loggerFactory;
 
-        public Startup(IHostingEnvironment env)
-        {
+        public Startup(IHostingEnvironment env, ILoggerFactory loggerFactory) {
+            this._loggerFactory = loggerFactory;
+            _loggerFactory.AddAzureWebAppDiagnostics();
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -49,10 +52,13 @@ namespace IdentityApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var logger = _loggerFactory.CreateLogger("ConfigureServices");
+
+
             //Add configuration service
-            services.AddSingleton<IConfiguration>(Configuration);       
+            services.AddSingleton<IConfiguration>(Configuration);
 
-
+            logger.LogInformation("Initializing ASP.NET Identity");
             // Add ASP.NET Identity services.
             services.AddIdentity<User, string>(opts => {
                 //opts.Cookies.ApplicationCookie.LoginPath = new PathString("/Account/SignIn");
@@ -70,6 +76,7 @@ namespace IdentityApi
 
 
 
+            logger.LogInformation("Initializing IdentityServer4 services");
             //Add IdentityServer4 services
             services.AddSingleton<IClientStore, ZumoClientStore>();
 
@@ -83,10 +90,10 @@ namespace IdentityApi
                 .AddDefaultEndpoints()
                 .AddInMemoryIdentityResources(IdentityServerData.GetIdentityResources())
                 .AddInMemoryApiResources(IdentityServerData.GetApiResources())
-
                 .AddAspNetIdentity<User>();
 
             try {
+                logger.LogInformation("Loading certificate PFX");
                 //loading certificate as pfx file
                 var certificate = new X509Certificate2(certFilePath, certPassword, X509KeyStorageFlags.MachineKeySet);
                 identityServerBuilder.AddSigningCredential(certificate);
@@ -97,6 +104,7 @@ namespace IdentityApi
             catch (Exception ex) {
                 //If not available - generate temporary
                 identityServerBuilder.AddTemporarySigningCredential();
+                logger.LogError(99, ex, ex.Message);
                 InitErrors += ex.Message + "\n" + ex.StackTrace;
             }
 
@@ -110,8 +118,11 @@ namespace IdentityApi
             //    .AddAspNetIdentity<ApplicationUser>();
 
 
+            logger.LogInformation("Initializing MVC services");
             services.AddMvc();
 
+
+            logger.LogInformation("Initializing Swagger services");
             //Add swagger services
             var pathToDoc = "IdentityApi.Host.xml";  //Configuration["Swagger:XmlDocPath"];
 
@@ -125,6 +136,8 @@ namespace IdentityApi
                 });
                 options.IncludeXmlComments(pathToDoc);
             });
+
+            logger.LogInformation("Add other application services");
 
             services.AddScoped<IUserService, UserService>();
 
@@ -142,16 +155,12 @@ namespace IdentityApi
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-            loggerFactory.AddConsole();
 
             app.UseDeveloperExceptionPage();
-            if (env.IsDevelopment())
-            {
+            if (env.IsDevelopment()) {
                 app.UseBrowserLink();
             }
-            else
-            {
+            else {
                 app.UseExceptionHandler("/Home/Error");
             }
 
