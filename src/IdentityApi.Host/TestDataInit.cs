@@ -27,7 +27,8 @@ namespace IdentityApi
             if (user == null) {
                 user = new User {
                     Email = "admin@zumo.org",
-                    FullName = "Admin User 01",
+                    FirstName = "Main",
+                    LastName = "Admin",
                     Roles = "admin,user"
                 };
 
@@ -36,15 +37,16 @@ namespace IdentityApi
                 await _userManager.AddPasswordAsync(user, "admin01");
             }
 
-            user = await _userManager.FindByNameAsync("test02@zumo.org");
+            user = await _userManager.FindByNameAsync("test01@zumo.org");
             if (user == null) {
                 user = new User {
-                    Email = "test02@zumo.org",
-                    FullName = "Test User 02",
+                    Email = "test01@zumo.org",
+                    FirstName = "Test",
+                    LastName = "User 01",
                     Roles = "user"
                 };
 
-                await _userManager.CreateAsync(user, "test02");
+                await _userManager.CreateAsync(user, "test01");
             }
         }
     }
