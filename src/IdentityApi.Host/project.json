@@ -40,7 +40,8 @@
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.1.0",
     "WindowsAzure.Storage": "8.1.0",
-    "Swashbuckle": "6.0.0-beta902"
+    "Swashbuckle": "6.0.0-beta902",
+    "Microsoft.Extensions.Logging.AzureAppServices": "1.0.0"
   },
 
   "tools": {
